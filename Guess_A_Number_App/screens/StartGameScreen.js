@@ -5,7 +5,9 @@ import Colors from '../constants/colors'
 import Input from '../components/Input';
 import { Alert } from 'react-native';
 import NumberContainer from '../components/NumberContainer';
-const StartGameScreen =()=>{
+import BodyText from '../components/BodyText';
+import MainButton from '../components/MainButton';
+const StartGameScreen =(props)=>{
     
     const [val,setVal]=useState('')
     const [confirmed,setConfirmed]=useState(false)
@@ -35,9 +37,12 @@ const StartGameScreen =()=>{
     {
         ConfirmedNumber= 
         <Card style={styles.summaryContainer}>
-            <Text>Chosen Number</Text>
+            
+            <BodyText>Chosen Number</BodyText>
                     <NumberContainer >{selectedNum}</NumberContainer>
-                    <Button title='Start game'></Button>
+                    <MainButton onClick={()=>{
+                        props.onStartGame(selectedNum);
+                    }}>Start game</MainButton>
             </Card>
     }
 return(
@@ -70,7 +75,9 @@ const styles=StyleSheet.create({
         alignItems:'center',
         
     },
-    title:{fontSize:20,marginVertical:10},
+    title:{fontSize:20,marginVertical:10,
+     fontFamily:'Lato-Bold'
+    },
     inputContainer:{
         width:300,
      maxWidth:'80%',
