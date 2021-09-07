@@ -1,24 +1,22 @@
 import React from "react";
-import {Text,View,StyleSheet, Button} from 'react-native'
-import { CATEGORIES } from "../data/dummy-data";
+import {Text,View,StyleSheet, Button, FlatList} from 'react-native'
+import MealItem from "../components/MealItem";
+import MealList from "../components/MealList";
+import { CATEGORIES, MEALS } from "../data/dummy-data";
+
+
 export default CategoryMealsScreen=(props)=>{
  
  const catId=props.navigation.getParam('categoryId');
+const displayedMeals = MEALS.filter(meal =>meal.categoryIds.indexOf(catId)>=0)
+// const selectedCat = CATEGORIES.find(cat=>cat.id==catId);
+return (<MealList listData={displayedMeals} navigation ={props.navigation} />)
+}
+
+
+CategoryMealsScreen.navigationOptions=(navigationData)=>{
+    const catId=navigationData.navigation.getParam('categoryId');
 
     const selectedCat = CATEGORIES.find(cat=>cat.id==catId);
-return (<View style={styles.screen}>
-    <Text>{selectedCat.title}</Text>
-    <Button title='Go to details' onPress={()=>{
-        props.navigation.navigate('MealDetail')
-    }}/>
-
-  </View>)
-
+   return{ headerTitle:selectedCat.title}
 }
-const styles=StyleSheet.create({
-    screen:{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
-    }
-})

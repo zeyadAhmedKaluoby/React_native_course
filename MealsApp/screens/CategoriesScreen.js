@@ -1,21 +1,18 @@
 import React from "react";
 import {CATEGORIES} from '../data/dummy-data'
 import {Text,View,StyleSheet,FlatList,TouchableOpacity, Button} from 'react-native'
-import Colors from "../constants/Colors";
+import CategoryGridTile from "../components/CategoryGridTile";
+import Icon from 'react-native-vector-icons/Ionicons';
+
 export default CategoriesScreen=(props)=>{
   const renderGridItem =(itemData)=>{
-    return <TouchableOpacity
-
-    style={styles.gridItem}
-     onPress={()=>{
-        props.navigation.navigate({routeName:'CategoriesMeals',params:{
+    return <CategoryGridTile title={itemData.item.title}
+    color={itemData.item.color}
+     onTap={()=>{
+        props.navigation.navigate({routeName:'CategoryMeals',params:{
             categoryId:itemData.item.id
         }})
-    }}>
-         <View >
-        <Text>{itemData.item.title}</Text>
-    </View>
-    </TouchableOpacity>
+    }} />
   }
   return (<View style={styles.screen}>
       <FlatList keyExtractor={(item,index)=>{
@@ -38,11 +35,9 @@ const styles=StyleSheet.create({
     }
 })
 
-CategoriesScreen.navigationOptions={
+CategoriesScreen.navigationOptions=(navData)=>{return{
     headerTitle:'Meal Categories',
-    headerStyle:{
-        backgroundColor: Colors.primaryColor,
-
-    },
-    headerTintColor:'white'
+    headerLeft:()=>{ return <TouchableOpacity  onPress={()=>{navData.navigation.openDrawer()}}
+    ><View><Text>Drawer</Text></View></TouchableOpacity>
 }
+}}
