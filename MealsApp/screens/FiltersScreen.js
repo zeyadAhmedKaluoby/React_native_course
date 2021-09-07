@@ -3,20 +3,23 @@ import {Text,View,StyleSheet,Switch} from 'react-native'
 import Colors from "../constants/Colors";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
+import { setFilters } from "../store/actions/meals";
 
 export default FilterScreen=(props)=>{
   const [isGuten,setIsGuten]=useState(false)
   const [isLactos,setIsLactos]=useState(false)
   const [isVegan,setIsVegan]=useState(false)
-
+const dispatch = useDispatch()
   const savedFilters= useCallback(()=>{
     const appliedFilters={
       glutenFree:isGuten,
       lactosFree:isLactos,
       veganFree:isVegan
     }
-    console.log(appliedFilters)
-  },[isGuten,isLactos,isVegan])
+dispatch(setFilters(appliedFilters))
+    
+  },[isGuten,isLactos,isVegan,dispatch])
 
   useEffect(()=>{
     props.navigation.setParams({save:savedFilters})

@@ -20,7 +20,8 @@ return (<View style={styles.list}>
          title ={itemData.item.title}
         onTap={()=>{
                 props.navigation.navigate({routeName:'MealDetail',params:{
-                    mealId: itemData.item.id
+                    mealId: itemData.item.id,
+                    mealTitle:itemData.item.title
                 }})
         }}>
         </MealItem>)

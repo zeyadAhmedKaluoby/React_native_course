@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import {Text,View,StyleSheet,ScrollView, TouchableOpacity, Image} from 'react-native'
 import { MEALS } from "../data/dummy-data";
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../store/actions/meals";
 export default MealDetailsScreen=(props)=>{
   const meId= props.navigation.getParam('mealId')
-  const selectedMeal = MEALS.find(meal=>meal.id==meId);
+  const availableMeals =useSelector(state=>state.meals.meals)
+  const selectedMeal = availableMeals.find(meal=>meal.id==meId);
+  const dispatch = useDispatch();
+  const toggleFavoriteFunction = useCallback(()=>{
+    dispatch(toggleFavorite(meId))
+  },[dispatch,meId])
 
-  return (<ScrollView>
+useEffect(()=>{
+ //props.navigation.setParams({mealTitle:selectedMeal.title})
+
+ props.navigation.setParams({toggleFav:toggleFavoriteFunction})
+},[toggleFavoriteFunction ])
+return (<ScrollView>
     <Image  source={{uri:selectedMeal.imageUrl}} style={{width:'100%',height:200}}/>
     <View style={{flexDirection:'row',padding:15,justifyContent:'space-around'}}>
 <Text>{selectedMeal.duration}m</Text>
@@ -20,12 +32,15 @@ export default MealDetailsScreen=(props)=>{
 
 }
 MealDetailsScreen.navigationOptions=(navigationData)=>{
-  const meId= navigationData.navigation.getParam('mealId')
-  const selectedMeal = MEALS.find(meal=>meal.id==meId);
 
+  const meId= navigationData.navigation.getParam('mealId')
+  //const selectedMeal = availableMeals.find(meal=>meal.id==meId);
+  const mealTitle = navigationData.navigation.getParam('mealTitle')
+  const toggleFavorite = navigationData.navigation.getParam('toggleFav')
+ 
   return{
-    headerTitle:selectedMeal.title,
-    headerRight:()=> <TouchableOpacity  >
+    headerTitle:mealTitle,
+    headerRight:()=> <TouchableOpacity onPress={toggleFavorite} >
       <View>
       <Text>Fav</Text>
     </View></TouchableOpacity>
