@@ -1,8 +1,10 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import { FlatList,Text } from 'react-native'
+import { FlatList,Platform,Text } from 'react-native'
 import ProductItem from '../../components/shop/ProductItem'
 import { addToCart } from '../../store/actions/cart'
+import { HeaderButtons ,Item} from 'react-navigation-header-buttons'
+import HeaderButton from '../../components/UI/HeaderButton'
 
 
 
@@ -27,7 +29,7 @@ export default ProductsOverviewScreen=(props)=>{
                 }})
         }}
         onAddToCart={()=>{
-            dispatch(addToCart());
+            dispatch(addToCart(itemData.item));
         }}
 
          />
@@ -35,6 +37,20 @@ export default ProductsOverviewScreen=(props)=>{
     />
 }
 
-ProductsOverviewScreen.navigationOptions={
-    headerTitle:'Products Overview'
+ProductsOverviewScreen.navigationOptions=(navData)=>{
+  return{
+        headerTitle:'Products Overview',
+    headerRight: <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item title='cart' iconName='ios-cart'
+         onPress={()=>{
+             navData.navigation.navigate({routeName:'cart'})
+         }}/>
+    </HeaderButtons>,
+    headerLeft:<HeaderButtons HeaderButtonComponent={HeaderButton}>
+    <Item title='Menu' iconName='ios-menu'
+     onPress={()=>{
+         navData.navigation.toggleDrawer()
+     }}/>
+</HeaderButtons>
+}
 }

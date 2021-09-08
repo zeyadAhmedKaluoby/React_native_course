@@ -1,5 +1,6 @@
 import CartItem from "../../model/cart-item";
-import { ADD_TO_CART } from "../actions/cart";
+import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cart";
+import { ADD_ORDER } from "../actions/oreder";
 
 const initialState={
   items:{},
@@ -11,6 +12,7 @@ export default (state=initialState,action)=>{
         case ADD_TO_CART:
             const addedProduct=action.product;
             const prodPrice = addedProduct.price;
+
             const prodTitle=addedProduct.title;
             let updatedOrNewCartItem;
             if(state.items[addedProduct.id]){
@@ -20,6 +22,7 @@ export default (state=initialState,action)=>{
                         prodTitle,
                         state.items[addedProduct.id].sum+prodPrice
                     );
+                    console.log(updatedOrNewCartItem.sum)
                 
             }else{
                 updatedOrNewCartItem=new CartItem(1,prodPrice,prodTitle,prodPrice)
@@ -29,7 +32,24 @@ export default (state=initialState,action)=>{
             totalAmount: state.totalAmount+prodPrice
          
         }
-        default:
+        case REMOVE_FROM_CART:
+            const currentQuantity=state.items[action.pId].quantity
+            const selectedCartItem = state.items[action.pId] 
+            let updatedCartItems;
+            if(currentQuantity>1)
+            {
+                     const updatedCartItem=new CartItem(selectedCartItem.quantity-1,
+                        selectedCartItem.productPrice,selectedCartItem.productTitle,selectedCartItem.sum-selectedCartItem.productPrice)
+                updatedCartItems={...state.items,[action.pId]:updatedCartItem}
+                    }else{
+                 updatedCartItems ={...state.items}
+                delete updatedCartItems[action.pId]
+            }
+            return{...state,items:updatedCartItems,totalAmount:state.totalAmount-selectedCartItem.productPrice}
+       
+            case ADD_ORDER:
+                return initialState
+            default:
             return state
     }
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import{View , Text,Button,Image,ScrollView,StyleSheet} from 'react-native'
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 import Colors from "../../constants/Colors";
 import { addToCart } from "../../store/actions/cart";
 
