@@ -5,7 +5,7 @@ import Colors from "../../constants/Colors";
 import CartItem from "../../components/shop/CartItem";
 import { removeFromCart } from "../../store/actions/cart";
 import { addOrder } from "../../store/actions/oreder";
-
+import Card from "../../components/UI/Card";
 export default CartScreen =(props)=>{
     
     const cartTotalAmount = useSelector(state=>state.cart.totalAmount)
@@ -28,7 +28,7 @@ export default CartScreen =(props)=>{
     
     
     return <View style={styles.screen}>
-        <View style={styles.summary}>
+        <Card style={styles.summary}>
         <Text style={styles.summaryText}>
             Total :<Text style={styles.ammount}>${cartTotalAmount.toFixed(2)}</Text></Text>
         <Button color='orange' title="Order Now" onPress={
@@ -36,13 +36,14 @@ export default CartScreen =(props)=>{
                 dispatch(addOrder(cartItems,cartTotalAmount))
             }
         } disabled={cartItems.length===0}></Button>
-</View>
+</Card>
 <FlatList data={cartItems} keyExtractor={item=>item.id}
 
 renderItem={
     (itemData)=><CartItem quantity={itemData.item.quantity}
          title={itemData.item.productTitle} 
          amount={itemData.item.sum}
+         deletable
          onRemove={()=>{
              dispatch(removeFromCart(itemData.item.productId))
          }}/>
@@ -58,7 +59,6 @@ summary:{
     alignItems:'center',
     justifyContent:'space-between',
     marginBottom:20,
-    elevation:3
 },
 summaryText:{
     fontSize:18

@@ -10,9 +10,9 @@ const CartItem=(props)=>{
         </Text>
         <View style={styles.itemData}>
             <Text style={styles.title}>${props.amount}</Text>
-            <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
+           { props.deletable&& <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
                 <Icon name ='md-trash' color='red' size={23} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     </View>
 };

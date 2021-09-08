@@ -1,29 +1,36 @@
-import React from "react";
+import React,{useState} from "react";
 import { Button, Text, View,StyleSheet } from "react-native";
 import Colors from "../../constants/Colors";
+import Card from "../UI/Card";
+import CartItem from "./CartItem";
 export default OrderItem = (props)=>{
+    const[showDetails,setShowDetails]=useState(false)
+    
     return(
-        <View style={styles.orderItem}>
+        <Card style={styles.orderItem}>
             <View style={styles.summary}>
                 <Text style={styles.totalAmount}>
                     ${props.amount.toFixed(2)}
                 </Text>
                 <Text style={styles.date}>
-                    ${props.date}
+                    {props.date}
                 </Text>
 
             </View>
-            <Button title="Show Details" color={Colors.primary}></Button>
-        </View>
+            <Button onPress={()=>{
+                setShowDetails(prevState=>!prevState)
+            }} title="Show Details" color={Colors.primary}></Button>
+        
+        {showDetails&& <View>
+            {props.items.map(cartItem=><CartItem key ={cartItem.productId} quantity={cartItem.quantity} amount ={cartItem.sum} title={cartItem.productTitle}/>)}
+            </View>}
+        </Card>
     )
 }
 
 const styles = StyleSheet.create({
     orderItem:{
-        elevation:4
-        ,borderRadius:10,
-        backgroundColor:'white',
-        height:100,
+
         margin:20,
         padding:15
     },
