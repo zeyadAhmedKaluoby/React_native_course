@@ -9,24 +9,13 @@
 import React from 'react';
 
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  StyleSheet,
+
+} from 'react-native';
 import { Provider } from 'react-redux';
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore ,applyMiddleware} from 'redux';
+import ReduxThunk from 'redux-thunk'
 import ShopNavigator from './navigation/ShopNavigator';
 import productReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
@@ -35,7 +24,7 @@ const rootReducer = combineReducers({
   products:productReducer,
 cart:cartReducer,
 orders:ordersReducer});
-const store=createStore(rootReducer);
+const store=createStore(rootReducer,applyMiddleware(ReduxThunk));
 
 const App= () => {
   

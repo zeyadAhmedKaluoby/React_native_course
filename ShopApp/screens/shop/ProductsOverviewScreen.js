@@ -1,16 +1,34 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import { FlatList,Platform,Text,View,Button } from 'react-native'
+import { FlatList,Platform,Text,View,Button, ActivityIndicator } from 'react-native'
 import ProductItem from '../../components/shop/ProductItem'
 import { addToCart } from '../../store/actions/cart'
 import { HeaderButtons ,Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../../components/UI/HeaderButton'
 
 import Colors from '../../constants/Colors'
+import { fetchProducts } from '../../store/actions/products'
 
 export default ProductsOverviewScreen=(props)=>{
     const products = useSelector(state=>state.products.availableProducts)
     const dispatch = useDispatch();
+    const [isLoading,setIsLoading]=useState(false)
+
+    useEffect(()=>{
+        const loadProducts=async()=>{
+        setIsLoading(true);
+       await dispatch(fetchProducts());
+       setIsLoading(false)
+        }
+        loadProducts()
+    },[dispatch])
+
+    if(isLoading)
+    {
+        return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+            <ActivityIndicator size='large' color={Colors.primary}/>
+        </View>
+    }
 
 
     return<FlatList data={products} keyExtractor={(item,index)=>{
