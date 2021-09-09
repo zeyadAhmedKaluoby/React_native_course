@@ -30,7 +30,7 @@ export default (state=initialState,action)=>{
                
             }
             return{...state,items:{...state.items,[addedProduct.id]:updatedOrNewCartItem},
-            totalAmount: state.totalAmount+prodPrice
+            totalAmount: +state.totalAmount+prodPrice
          
         }
         case REMOVE_FROM_CART:
@@ -58,7 +58,7 @@ export default (state=initialState,action)=>{
                 const updatedItems={...state.items}
                 const itemTotal = state.items[action.pId].sum
                 delete updatedItems[action.pId]
-                return{...state,items:updatedItems,totalAmount:state.totalAmount-itemTotal}
+                return{...state,items:updatedItems,totalAmount:+state.totalAmount-itemTotal}
             default:
             return state
     }

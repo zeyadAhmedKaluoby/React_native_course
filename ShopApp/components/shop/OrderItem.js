@@ -21,8 +21,9 @@ export default OrderItem = (props)=>{
                 setShowDetails(prevState=>!prevState)
             }} title="Show Details" color={Colors.primary}></Button>
         
-        {showDetails&& <View>
-            {props.items.map(cartItem=><CartItem key ={cartItem.productId} quantity={cartItem.quantity} amount ={cartItem.sum} title={cartItem.productTitle}/>)}
+        {showDetails&& <View >
+            {props.items.map(cartItem=><CartItem key ={cartItem.productId}
+             quantity={cartItem.quantity} amount ={cartItem.sum} title={cartItem.productTitle}/>)}
             </View>}
         </Card>
     )

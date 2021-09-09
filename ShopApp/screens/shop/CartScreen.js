@@ -8,7 +8,7 @@ import { addOrder } from "../../store/actions/oreder";
 import Card from "../../components/UI/Card";
 export default CartScreen =(props)=>{
     
-    const cartTotalAmount = useSelector(state=>state.cart.totalAmount)
+    const cartTotalAmount = useSelector(state=>+state.cart.totalAmount)
     const dispatch = useDispatch()
     const cartItems = useSelector(state=>{
         const transformedCartItems=[];

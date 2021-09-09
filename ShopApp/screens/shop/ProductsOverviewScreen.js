@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { FlatList,Platform,Text,View,Button, ActivityIndicator } from 'react-native'
 import ProductItem from '../../components/shop/ProductItem'
@@ -11,17 +11,37 @@ import { fetchProducts } from '../../store/actions/products'
 
 export default ProductsOverviewScreen=(props)=>{
     const products = useSelector(state=>state.products.availableProducts)
+
     const dispatch = useDispatch();
     const [isLoading,setIsLoading]=useState(false)
+    const[error,setError]=useState()
+
+    const loadProducts=useCallback( async()=>{
+        setError(null)
+
+        try{
+       await dispatch(fetchProducts());
+        }
+        catch(err){
+                setError(err.message)
+        }
+        },[dispatch,setIsLoading,setError])
 
     useEffect(()=>{
-        const loadProducts=async()=>{
-        setIsLoading(true);
-       await dispatch(fetchProducts());
-       setIsLoading(false)
+      const willFocusSub=  props.navigation.addListener('willFocus',loadProducts,[]
+        )
+        return()=>{
+            willFocusSub.remove()
         }
+
+    },[loadProducts]);
+    useEffect(()=>{
+        setIsLoading(true)
+       
         loadProducts()
-    },[dispatch])
+       setIsLoading(false)
+
+    },[dispatch,loadProducts])
 
     if(isLoading)
     {
@@ -31,7 +51,25 @@ export default ProductsOverviewScreen=(props)=>{
     }
 
 
-    return<FlatList data={products} keyExtractor={(item,index)=>{
+    if(error)
+    {
+        return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+            <Text>Something happend</Text>
+        </View>
+    }
+
+    if(isLoading &&products.length ===0)
+    {
+        return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+            <Text>No products founded</Text>
+        </View>
+    }
+
+    return<FlatList data={products}
+    onRefresh={loadProducts}
+    refreshing={isLoading}
+    
+    keyExtractor={(item,index)=>{
         return item.id
     }}
     renderItem={itemData=>{
