@@ -16,14 +16,17 @@ import {
 import { Provider } from 'react-redux';
 import { combineReducers, createStore ,applyMiddleware} from 'redux';
 import ReduxThunk from 'redux-thunk'
-import ShopNavigator from './navigation/ShopNavigator';
 import productReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from'./store/reducers/oreder'
+import authReducer from'./store/reducers/auth'
+import NavigationContainer from './navigation/NavigationContainer';
+
 const rootReducer = combineReducers({
-  products:productReducer,
+products:productReducer,
 cart:cartReducer,
-orders:ordersReducer});
+orders:ordersReducer,
+auth:authReducer});
 const store=createStore(rootReducer,applyMiddleware(ReduxThunk));
 
 const App= () => {
@@ -31,7 +34,7 @@ const App= () => {
 
   return (
 <Provider store={store}>
-  <ShopNavigator/>
+  <NavigationContainer/>
 </Provider>  )};
 
 const styles = StyleSheet.create({

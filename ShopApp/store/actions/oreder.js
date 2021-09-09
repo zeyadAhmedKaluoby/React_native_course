@@ -5,10 +5,10 @@ export const SET_ORDER ="SET_ORDER"
 
 
 export const fetchOrders =()=>{
-    return async dispatch=>{
-        //any async code
+    return async (dispatch,getState)=>{
+        const userId = getState().auth.userId
         try{
-       const response = await fetch('https://shopapp-34979-default-rtdb.firebaseio.com/orders/u1.json',{
+       const response = await fetch(`https://shopapp-34979-default-rtdb.firebaseio.com/orders/${userId}.json`,{
             method:'GET'
           });
           if(!response.ok)
@@ -42,9 +42,12 @@ export const fetchOrders =()=>{
 
 
 export const addOrder =(cartItems,totalAmount)=>{
-    return async dispatch=>{
+    return async( dispatch,getState)=>{
          const date =new Date()
-        const response = await fetch('https://shopapp-34979-default-rtdb.firebaseio.com/orders/u1.json',{
+        const token = getState().auth.token
+        const userId = getState().auth.userId
+
+        const response = await fetch(`https://shopapp-34979-default-rtdb.firebaseio.com/orders/${userId}.json?auth=${token}`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
